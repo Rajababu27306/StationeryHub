@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StationeryHub Admin Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff5f8;
+      color: #333;
+    }
+
+    header {
+      background: #d63384;
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 23px;
+    }
+
+    button {
+      border: none;
+      border-radius: 6px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .logout {
+      background: white;
+      color: #d63384;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 25px auto;
+      padding: 0 15px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    #refreshBtn {
+      background: #d63384;
+      color: white;
+    }
+
+    #message {
+      margin: 15px 0;
+      overflow-wrap: anywhere;
+    }
+
+    .order {
+      background: white;
+      border: 1px solid #f0c5d9;
+      border-radius: 10px;
+      padding: 18px;
+      margin: 16px 0;
+      box-shadow: 0 3px 10px #0000000a;
+    }
+
+    .order h3 {
+      margin-top: 0;
+      color: #b4236b;
+    }
+
+    .order p {
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .status-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      max-width: 100%;
+    }
+
+    .save-btn {
+      background: #198754;
+      color: white;
+    }
+
+    .items {
+      padding-left: 20px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 19px;
+      }
+
+      .order {
+        padding: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>StationeryHub Admin</h1>
+    <button class="logout" id="logoutBtn">Logout</button>
+  </header>
+
+  <main>
+    <div class="topbar">
+      <h2>Customer Orders</h2>
+      <button id="refreshBtn">Refresh Orders</button>
+    </div>
+
+    <p id="message" role="status">Loading orders...</p>
+    <section id="orders"></section>
+  </main>
+
+  <script>
+    const API_URL = "http://localhost:5000/api/orders";
+    const token = sessionStorage.getItem("stationeryHubAdminToken");
+
+    const message = document.getElementById("message");
+    const ordersContainer = document.getElementById("orders");
+
+    if (!token) {
+      window.location.replace("admin-login.html");
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      sessionStorage.removeItem("stationeryHubAdminToken");
+      window.location.replace("admin-login.html");
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", loadOrders);
+
+    async function apiRequest(url, options = {}) {
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+          ...(options.headers || {})
+        }
+      });
+
+      if (response.status === 401 || response.status === 403) {
+        sessionStorage.removeItem("stationeryHubAdminToken");
+        window.location.replace("admin-login.html");
+        throw new Error("Session expired. Please log in again.");
+      }
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.message || data.error || "Request failed");
+      }
+
+      return data;
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function formatItems(items) {
+      if (!Array.isArray(items) || items.length === 0) {
+        return "<li>No item details available</li>";
+      }
+
+      return items.map(item => {
+        const name = escapeHTML(
+          item.name || item.productName || item.title || "Product"
+        );
+        const quantity = Number(item.quantity) || 1;
+
+        return `<li>${name} — Qty: ${quantity}</li>`;
+      }).join("");
+    }
+
+    async function loadOrders() {
+      message.textContent = "Loading orders...";
+      ordersContainer.replaceChildren();
+
+      try {
+        const data = await apiRequest(API_URL);
+        const orders = Array.isArray(data)
+          ? data
+          : (data.orders || data.data || []);
+
+        if (!Array.isArray(orders) || orders.length === 0) {
+          message.textContent = "No orders found.";
+          return;
+        }
+
+        message.textContent = `${orders.length} order(s) found.`;
+
+        orders.forEach(order => {
+          const id = order._id;
+          const status = order.status || "Pending";
+          const allowedStatuses = [
+            "Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"
+          ];
+
+          const card = document.createElement("article");
+          card.className = "order";
+
+          card.innerHTML = `
+            <h3>Order #${escapeHTML(id || "Unknown")}</h3>
+            <p><strong>Customer:</strong>
+              ${escapeHTML(order.customerName || order.name || "N/A")}</p>
+            <p><strong>Mobile:</strong>
+              ${escapeHTML(order.mobile || order.phone || "N/A")}</p>
+            <p><strong>Address:</strong>
+              ${escapeHTML(order.address || "N/A")}</p>
+            <p><strong>Total:</strong>
+              ₹${escapeHTML(order.totalAmount ?? order.total ?? 0)}</p>
+            <p><strong>Items:</strong></p>
+            <ul class="items">${formatItems(order.items)}</ul>
+            <p><strong>Current status:</strong>
+              ${escapeHTML(status)}</p>
+            <div class="status-row">
+              <label>
+                Update status:
+                <select class="status-select" aria-label="Order status">
+                  ${allowedStatuses.map(s =>
+                    `<option value="${s}" ${s === status ? "selected" : ""}>${s}</option>`
+                  ).join("")}
+                </select>
+              </label>
+              <button class="save-btn">Save Status</button>
+            </div>
+            <p class="order-message" role="status"></p>
+          `;
+
+          const saveBtn = card.querySelector(".save-btn");
+          const select = card.querySelector(".status-select");
+          const statusMessage = card.querySelector(".order-message");
+
+          saveBtn.addEventListener("click", async () => {
+            if (!id) {
+              statusMessage.textContent = "Order ID missing.";
+              return;
+            }
+
+            saveBtn.disabled = true;
+            statusMessage.textContent = "Updating status...";
+
+            try {
+              await apiRequest(
+                `${API_URL}/${encodeURIComponent(id)}/status`,
+                {
+                  method: "PATCH",
+                  body: JSON.stringify({ status: select.value })
+                }
+              );
+
+              statusMessage.textContent = "Status updated successfully!";
+              await loadOrders();
+            } catch (error) {
+              statusMessage.textContent = error.message;
+              saveBtn.disabled = false;
+            }
+          });
+
+          ordersContainer.appendChild(card);
+        });
+      } catch (error) {
+        message.textContent = "Could not load orders: " + error.message;
+      }
+    }
+
+    if (token) {
+      loadOrders();
+    }
+  </script>
+</body>
+</html>

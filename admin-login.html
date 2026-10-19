@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StationeryHub | Admin Login</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #fff1f2, #ffe4e6, #fff7ed);
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      padding: 35px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 15px 45px rgba(100, 30, 30, 0.13);
+    }
+
+    .logo {
+      width: 65px;
+      height: 65px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      background: #e11d48;
+      color: white;
+      border-radius: 18px;
+      font-size: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #881337;
+      font-size: 27px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      margin: 10px 0 28px;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      margin: 16px 0 8px;
+      color: #333;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 9px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #e11d48;
+      box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.1);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px;
+      border: none;
+      border-radius: 9px;
+      background: #e11d48;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #be123c;
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+
+    #message {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 22px;
+      text-align: center;
+      color: #be123c;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="login-card">
+    <div class="logo">✏️</div>
+
+    <h1>Admin Login</h1>
+    <p class="subtitle">StationeryHub Management Portal</p>
+
+    <form id="loginForm">
+      <label for="username">Username</label>
+      <input
+        id="username"
+        name="username"
+        type="text"
+        placeholder="Enter admin username"
+        autocomplete="username"
+        required
+      >
+
+      <label for="password">Password</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        placeholder="Enter admin password"
+        autocomplete="current-password"
+        required
+      >
+
+      <button id="loginButton" type="submit">
+        Login to Dashboard
+      </button>
+
+      <p id="message" role="status" aria-live="polite"></p>
+    </form>
+
+    <a class="back-link" href="index.html">← Back to Store</a>
+  </main>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const loginButton = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+
+    loginForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const username =
+        document.getElementById("username").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+      message.textContent = "";
+      loginButton.disabled = true;
+      loginButton.textContent = "Logging in...";
+
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/admin/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              username,
+              password
+            })
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success || !data.token) {
+          throw new Error(
+            data.message || "Login failed. Please try again."
+          );
+        }
+
+        // Keep the token only for the current browser tab session.
+        sessionStorage.setItem(
+          "stationeryHubAdminToken",
+          data.token
+        );
+
+        message.style.color = "#15803d";
+        message.textContent = "Login successful! Opening dashboard...";
+
+        window.location.href = "server/admin.html";
+
+      } catch (error) {
+        message.style.color = "#b91c1c";
+
+        if (error.message === "Failed to fetch") {
+          message.textContent =
+            "Backend connection failed. Check whether your server is running on port 5000.";
+        } else {
+          message.textContent = error.message;
+        }
+      } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = "Login to Dashboard";
+      }
+    });
+  </script>
+</body>
+</html>
