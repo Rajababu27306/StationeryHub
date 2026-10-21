@@ -1,0 +1,378 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Track Order | StationeryHub</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f6fb;
+      color: #172033;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #172554;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 27px;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      color: #dbeafe;
+      font-size: 14px;
+    }
+
+    .container {
+      width: min(92%, 600px);
+      margin: 45px auto;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+
+    .description {
+      color: #64748b;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 9px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      margin-bottom: 15px;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px #dbeafe;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+
+    #message {
+      margin-top: 18px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .error {
+      color: #b91c1c;
+      background: #fef2f2;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .result {
+      margin-top: 24px;
+      padding: 20px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+    }
+
+    .result h3 {
+      margin-bottom: 16px;
+    }
+
+    .detail {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .detail:last-child {
+      border-bottom: none;
+    }
+
+    .detail span:first-child {
+      color: #64748b;
+    }
+
+    .detail span:last-child {
+      font-weight: bold;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 20px;
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 22px;
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 22px;
+      }
+
+      .detail {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .detail span:last-child {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>StationeryHub</h1>
+    <p>Your stationery, your convenience.</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Track Your Order 📦</h2>
+
+      <p class="description">
+        Enter your Order ID to check your latest order status.
+        You can find your Order ID in the successful order response
+        or your order confirmation details.
+      </p>
+
+      <form id="trackForm">
+        <label for="orderId">Order ID</label>
+
+        <input
+          type="text"
+          id="orderId"
+          name="orderId"
+          placeholder="Paste your Order ID here"
+          autocomplete="off"
+          required
+        />
+
+        <button type="submit" id="trackButton">
+          Track Order
+        </button>
+      </form>
+
+      <div id="message" role="status" aria-live="polite"></div>
+      <div id="result"></div>
+
+      <a class="back" href="index.html">
+        ← Back to Home
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    © StationeryHub. All rights reserved.
+  </footer>
+
+  <script>
+    const API_URL = "http://localhost:5000/api/orders";
+
+    const form = document.getElementById("trackForm");
+    const orderIdInput = document.getElementById("orderId");
+    const trackButton = document.getElementById("trackButton");
+    const message = document.getElementById("message");
+    const result = document.getElementById("result");
+
+    const validStatuses = [
+      "Pending",
+      "Confirmed",
+      "Shipped",
+      "Delivered",
+      "Cancelled"
+    ];
+
+    function showMessage(text, isError = false) {
+      message.textContent = text;
+      message.className = isError ? "error" : "";
+    }
+
+    function addDetail(parent, label, value, status = false) {
+      const row = document.createElement("div");
+      row.className = "detail";
+
+      const labelElement = document.createElement("span");
+      labelElement.textContent = label;
+
+      const valueElement = document.createElement("span");
+      valueElement.textContent = value;
+
+      if (status) {
+        valueElement.className = "status";
+      }
+
+      row.append(labelElement, valueElement);
+      parent.appendChild(row);
+    }
+
+    function formatDate(value) {
+      if (!value) return "Not available";
+
+      const date = new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "Not available";
+      }
+
+      return date.toLocaleString();
+    }
+
+    function showOrder(order) {
+      result.replaceChildren();
+
+      const card = document.createElement("section");
+      card.className = "result";
+
+      const heading = document.createElement("h3");
+      heading.textContent = "Order Details";
+
+      card.appendChild(heading);
+
+      addDetail(card, "Order ID", order.orderId);
+      addDetail(
+        card,
+        "Current Status",
+        order.status,
+        true
+      );
+      addDetail(
+        card,
+        "Order Date",
+        formatDate(order.orderDate)
+      );
+      addDetail(
+        card,
+        "Last Updated",
+        formatDate(order.lastUpdated)
+      );
+
+      result.appendChild(card);
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const id = orderIdInput.value.trim();
+
+      if (!id) {
+        showMessage("Please enter your Order ID.", true);
+        return;
+      }
+
+      showMessage("");
+      result.replaceChildren();
+      trackButton.disabled = true;
+      trackButton.textContent = "Checking...";
+
+      try {
+        const response = await fetch(
+          `${API_URL}/track/${encodeURIComponent(id)}`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(
+            data.message || "Unable to find this order."
+          );
+        }
+
+        const order = data.order;
+
+        if (
+          !order ||
+          !order.orderId ||
+          !validStatuses.includes(order.status)
+        ) {
+          throw new Error("The server returned an invalid order response.");
+        }
+
+        showMessage("Order details loaded successfully.");
+        showOrder(order);
+      } catch (error) {
+        console.error("Tracking error:", error);
+
+        showMessage(
+          error.message === "Failed to fetch"
+            ? "Cannot connect to the server. Make sure your backend is running."
+            : error.message,
+          true
+        );
+      } finally {
+        trackButton.disabled = false;
+        trackButton.textContent = "Track Order";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Product = require("./models/Product");
 
 const MONGODB_URI =
-  "mongodb+srv://rb7624582_db_user:Raja_27306@foodiecluster.9lxyc2b.mongodb.net/stationeryhub?retryWrites=true&w=majority";
+  process.env.MONGODB_URI;
 
 const products = [
   {
