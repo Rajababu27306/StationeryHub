@@ -1,35 +1,28 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="description" content="Shop notebooks, pens, pencils and art supplies at StationeryHub.">
   <title>StationeryHub | Your Everyday Stationery Store</title>
-  <meta
-    name="description"
-    content="Shop notebooks, pens, pencils, art supplies and everyday stationery at StationeryHub."
-  >
 
-  <link rel="stylesheet" href="/server/public/style.css">
-  <script src="script.js" defer></script>
+  <!-- CSS and JavaScript files -->
+  <link rel="stylesheet" href="./style.css">
+  <script src="./script.js" defer></script>
 </head>
-
 <body>
-  <!-- Announcement bar -->
   <div class="announcement-bar">
     <p>Welcome to StationeryHub — Everything you need to create!</p>
   </div>
 
-  <!-- Header -->
   <header class="site-header">
     <div class="header-container">
-      <a href="#" class="logo" aria-label="StationeryHub home">
+      <a href="#home" class="logo">
         <span class="logo-icon">✏️</span>
         <span>Stationery<span class="logo-highlight">Hub</span></span>
       </a>
 
-      <nav class="main-nav" aria-label="Main navigation">
+      <nav class="main-nav">
         <a href="#home">Home</a>
         <a href="#shop">Shop</a>
         <a href="#categories">Categories</a>
@@ -38,63 +31,33 @@
       </nav>
 
       <div class="header-actions">
-        <a href="#wishlist" class="header-action" aria-label="Wishlist">
-          <span>♡</span>
-          <span>Wishlist</span>
-          <span id="wishlistCount" class="count-badge">0</span>
-        </a>
-
-        <a href="#cart" class="header-action" aria-label="Shopping cart">
-          <span>🛒</span>
-          <span>Cart</span>
-          <span id="cartCount" class="count-badge">0</span>
-        </a>
-
-        <a href="#account" class="header-action account-link">
-          <span>👤</span>
-          <span>Account</span>
-        </a>
+        <a href="#wishlist">♡ Wishlist <span id="wishlistCount" class="count-badge">0</span></a>
+        <a href="#cart">🛒 Cart <span id="cartCount" class="count-badge">0</span></a>
+        <a href="#account">👤 Account</a>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- Hero -->
     <section id="home" class="hero-section">
       <div class="hero-content">
         <span class="hero-tag">YOUR CREATIVE CORNER</span>
-
         <h1>Make Every Idea <span>Come Alive.</span></h1>
-
-        <p>
-          Discover notebooks, pens, art supplies and all your
-          everyday stationery essentials in one place.
-        </p>
+        <p>Discover notebooks, pens, art supplies and everyday stationery essentials in one place.</p>
 
         <div class="hero-buttons">
           <a href="#shop" class="btn btn-primary">Shop Now →</a>
-          <a href="#categories" class="btn btn-secondary">
-            Explore Categories
-          </a>
+          <a href="#categories" class="btn btn-secondary">Explore Categories</a>
         </div>
 
         <div class="hero-highlights">
-          <div>
-            <strong>Quality</strong>
-            <span>Products</span>
-          </div>
-          <div>
-            <strong>Easy</strong>
-            <span>Shopping</span>
-          </div>
-          <div>
-            <strong>Everyday</strong>
-            <span>Essentials</span>
-          </div>
+          <div><strong>Quality</strong><span>Products</span></div>
+          <div><strong>Easy</strong><span>Shopping</span></div>
+          <div><strong>Everyday</strong><span>Essentials</span></div>
         </div>
       </div>
 
-      <div class="hero-art" aria-label="Stationery supplies illustration">
+      <div class="hero-art">
         <div class="hero-circle">
           <div class="hero-stationery">📚</div>
           <div class="floating-item floating-pencil">✏️</div>
@@ -105,42 +68,25 @@
       </div>
     </section>
 
-    <!-- Benefits -->
-    <section class="benefits-section" aria-label="Store benefits">
+    <section class="benefits-section">
       <article class="benefit-card">
         <span class="benefit-icon">📦</span>
-        <div>
-          <h3>Carefully Selected</h3>
-          <p>Everyday stationery essentials</p>
-        </div>
+        <div><h3>Carefully Selected</h3><p>Everyday stationery essentials</p></div>
       </article>
-
       <article class="benefit-card">
         <span class="benefit-icon">💳</span>
-        <div>
-          <h3>Simple Shopping</h3>
-          <p>Easy-to-use shopping experience</p>
-        </div>
+        <div><h3>Simple Shopping</h3><p>Easy-to-use shopping experience</p></div>
       </article>
-
       <article class="benefit-card">
         <span class="benefit-icon">🎨</span>
-        <div>
-          <h3>Creative Choices</h3>
-          <p>Supplies for every new idea</p>
-        </div>
+        <div><h3>Creative Choices</h3><p>Supplies for every new idea</p></div>
       </article>
-
       <article class="benefit-card">
         <span class="benefit-icon">📚</span>
-        <div>
-          <h3>Study Essentials</h3>
-          <p>Ready for school and college</p>
-        </div>
+        <div><h3>Study Essentials</h3><p>Ready for school and college</p></div>
       </article>
     </section>
 
-    <!-- Categories -->
     <section id="categories" class="section category-section">
       <div class="section-heading">
         <div>
@@ -148,42 +94,29 @@
           <h2>Shop by Category</h2>
           <p>Find the right supplies for your next big idea.</p>
         </div>
-
         <a href="#shop" class="text-link">View All Products →</a>
       </div>
 
       <div class="category-grid">
-        <button type="button" class="category-card"
-          onclick="document.getElementById('categoryFilter').value='notebooks'; document.getElementById('categoryFilter').dispatchEvent(new Event('change'))">
-          <span class="category-illustration notebook-illustration">📓</span>
-          <strong>Notebooks</strong>
-          <span>Write your story</span>
+        <button class="category-card" data-category="notebooks" type="button">
+          <span class="category-illustration">📓</span>
+          <strong>Notebooks</strong><span>Write your story</span>
         </button>
-
-        <button type="button" class="category-card"
-          onclick="document.getElementById('categoryFilter').value='pens'; document.getElementById('categoryFilter').dispatchEvent(new Event('change'))">
-          <span class="category-illustration pen-illustration">🖊️</span>
-          <strong>Pens & Pencils</strong>
-          <span>Write with confidence</span>
+        <button class="category-card" data-category="pens" type="button">
+          <span class="category-illustration">🖊️</span>
+          <strong>Pens &amp; Pencils</strong><span>Write with confidence</span>
         </button>
-
-        <button type="button" class="category-card"
-          onclick="document.getElementById('categoryFilter').value='art'; document.getElementById('categoryFilter').dispatchEvent(new Event('change'))">
-          <span class="category-illustration art-illustration">🎨</span>
-          <strong>Art Supplies</strong>
-          <span>Let creativity flow</span>
+        <button class="category-card" data-category="art" type="button">
+          <span class="category-illustration">🎨</span>
+          <strong>Art Supplies</strong><span>Let creativity flow</span>
         </button>
-
-        <button type="button" class="category-card"
-          onclick="document.getElementById('categoryFilter').value='accessories'; document.getElementById('categoryFilter').dispatchEvent(new Event('change'))">
-          <span class="category-illustration accessory-illustration">📐</span>
-          <strong>Accessories</strong>
-          <span>Organise your desk</span>
+        <button class="category-card" data-category="accessories" type="button">
+          <span class="category-illustration">📐</span>
+          <strong>Accessories</strong><span>Organise your desk</span>
         </button>
       </div>
     </section>
 
-    <!-- Products -->
     <section id="shop" class="section products-section">
       <div class="section-heading">
         <div>
@@ -195,16 +128,13 @@
 
       <div class="product-toolbar">
         <div class="search-box">
-          <span aria-hidden="true">🔍</span>
-          <input
-            id="searchInput"
-            type="search"
-            placeholder="Search notebooks, pens, art supplies..."
-            aria-label="Search products"
-          >
+          <span>🔍</span>
+          <input id="searchInput" type="search"
+                 placeholder="Search notebooks, pens, art supplies..."
+                 aria-label="Search products">
         </div>
 
-        <label class="category-select-label" for="categoryFilter">
+        <label for="categoryFilter" class="category-select-label">
           Category
           <select id="categoryFilter">
             <option value="all">All Categories</option>
@@ -217,7 +147,6 @@
       </div>
     </section>
 
-    <!-- Wishlist -->
     <section id="wishlist" class="section wishlist-section">
       <div class="section-heading">
         <div>
@@ -226,14 +155,11 @@
           <p>Products you would like to find again.</p>
         </div>
       </div>
-
-      <p>
-        Wishlist items are marked with the heart icon on each product.
-        Your wishlist count is shown in the header.
-      </p>
+      <div id="wishlistItems" class="products-grid">
+        <p>Tap the heart on a product to save it here.</p>
+      </div>
     </section>
 
-    <!-- Cart -->
     <section id="cart" class="section cart-section">
       <div class="section-heading">
         <div>
@@ -253,21 +179,14 @@
             <span>Subtotal</span>
             <strong id="cartTotal">₹0.00</strong>
           </div>
-
-          <p class="cart-note">
-            Delivery charges and final order total will be confirmed
-            when checkout is connected to the backend.
-          </p>
-
-          <button type="button" class="btn btn-primary checkout-btn"
-            onclick="checkout()">
+          <p class="cart-note">Delivery charges and final order total will be confirmed at checkout.</p>
+          <button type="button" class="btn btn-primary checkout-btn" onclick="checkout()">
             Proceed to Checkout →
           </button>
         </div>
       </div>
     </section>
 
-    <!-- About -->
     <section id="about" class="section about-section">
       <div class="about-visual">
         <div class="about-emoji">📚 ✏️ 🎨</div>
@@ -277,57 +196,37 @@
       <div class="about-content">
         <span class="section-eyebrow">ABOUT STATIONERYHUB</span>
         <h2>Small Supplies. Big Ideas.</h2>
-        <p>
-          StationeryHub is a stationery shopping project designed to
-          make it easy to discover notebooks, writing instruments,
-          school supplies and creative essentials.
-        </p>
-        <p>
-          Our goal is to create a simple and convenient shopping
-          experience for students, teachers and creative minds.
-        </p>
+        <p>StationeryHub makes it easy to discover notebooks, writing instruments, school supplies and creative essentials.</p>
+        <p>Our goal is to create a simple shopping experience for students, teachers and creative minds.</p>
         <a href="#shop" class="btn btn-primary">Explore Products →</a>
       </div>
     </section>
 
-    <!-- Account placeholder -->
     <section id="account" class="section account-section">
       <div class="section-heading">
         <div>
-          ```html
-<section>
-  <p>YOUR ACCOUNT</p>
-  <h2>Welcome to StationeryHub</h2>
-  <p>Login to manage your account, view your orders, and track deliveries.</p>
-
-  <a href="customer-auth.html" class="btn">
-    Customer Login / Signup
-  </a>
-
-  <a href="my-orders.html" class="btn">
-    My Orders
-  </a>
-</section>
-
+          <span class="section-eyebrow">YOUR ACCOUNT</span>
+          <h2>Welcome to StationeryHub</h2>
+          <p>Login to manage your account, view your orders and track deliveries.</p>
+          <div class="hero-buttons">
+            <a href="./customer-auth.html" class="btn btn-primary">Customer Login / Signup</a>
+            <a href="./my-orders.html" class="btn btn-secondary">My Orders</a>
+            <a href="./track-order.html" class="btn btn-secondary">Track Order</a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Newsletter -->
     <section class="newsletter-section">
       <div>
         <span class="section-eyebrow">STAY IN THE LOOP</span>
         <h2>A little inspiration, delivered.</h2>
-        <p>
-          Keep exploring stationery, study supplies and creative ideas.
-        </p>
+        <p>Keep exploring stationery, study supplies and creative ideas.</p>
       </div>
-
       <a href="#shop" class="btn btn-primary">Explore the Store →</a>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer id="contact" class="site-footer">
     <div class="footer-main">
       <div class="footer-brand">
@@ -335,11 +234,7 @@
           <span class="logo-icon">✏️</span>
           <span>Stationery<span class="logo-highlight">Hub</span></span>
         </a>
-
-        <p>
-          Your everyday destination for stationery, study supplies
-          and creative essentials.
-        </p>
+        <p>Your everyday destination for stationery, study supplies and creative essentials.</p>
       </div>
 
       <div class="footer-column">
@@ -355,29 +250,54 @@
         <a href="#contact">Contact Us</a>
         <a href="#cart">Shopping Cart</a>
         <a href="#account">My Account</a>
+        <a href="./my-orders.html">My Orders</a>
       </div>
 
       <div class="footer-column">
         <h3>Contact</h3>
         <p>Questions about the store?</p>
-        <p>This demo does not send emails or process payments.</p>
+        <p>This demo does not process payments unless a payment provider is configured.</p>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p>
-        © <span id="currentYear"></span> StationeryHub.
-        Built for learning and creativity.
-      </p>
+      <p>© <span id="currentYear"></span> StationeryHub. Built for learning and creativity.</p>
       <a href="#home">Back to top ↑</a>
     </div>
   </footer>
 
   <script>
     const yearElement = document.getElementById("currentYear");
+
     if (yearElement) {
       yearElement.textContent = new Date().getFullYear();
     }
+
+    document.querySelectorAll("[data-category]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const filter = document.getElementById("categoryFilter");
+        const shop = document.getElementById("shop");
+
+        if (!filter) {
+          shop?.scrollIntoView({ behavior: "smooth" });
+          return;
+        }
+
+        const wanted = button.dataset.category.toLowerCase();
+
+        const option = [...filter.options].find((item) =>
+          item.value.toLowerCase() === wanted ||
+          item.textContent.toLowerCase().includes(wanted)
+        );
+
+        if (option) {
+          filter.value = option.value;
+          filter.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+
+        shop?.scrollIntoView({ behavior: "smooth" });
+      });
+    });
   </script>
 </body>
 </html>

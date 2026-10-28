@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,89 +11,200 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --primary: #e87532;
+      --primary-dark: #c95b20;
+      --cream: #fffaf3;
+      --surface: #ffffff;
+      --text: #30251f;
+      --muted: #81766e;
+      --border: #f0e5d9;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      color: #1f2937;
-    }
-
-    header {
-      background: #172554;
-      color: white;
-      padding: 18px 6%;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    header h2 {
-      margin: 0;
+      flex-direction: column;
     }
 
     a {
       color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 17px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      color: var(--primary-dark);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.7px;
     }
 
     .header-links {
       display: flex;
-      gap: 16px;
       align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
     }
 
     .header-links a {
-      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .header-links a:hover {
+      color: var(--primary-dark);
+    }
+
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      background: var(--primary);
+      color: white;
+      padding: 11px 17px;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .button.secondary {
+      background: #fff1e5;
+      color: #a64a19;
+    }
+
+    .button.secondary:hover {
+      background: #ffe5cf;
     }
 
     main {
-      max-width: 1000px;
-      margin: 35px auto;
-      padding: 0 16px;
+      width: 100%;
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 38px 20px 50px;
+      flex: 1;
     }
 
     .intro {
-      margin-bottom: 24px;
+      margin-bottom: 27px;
+    }
+
+    .eyebrow {
+      color: var(--primary-dark);
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+    }
+
+    .intro h1 {
+      font-size: clamp(28px, 4vw, 38px);
+      margin: 9px 0;
+      letter-spacing: -1px;
     }
 
     .intro p {
-      color: #64748b;
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .orders-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .orders-heading h2 {
+      font-size: 19px;
+      margin: 0;
+    }
+
+    .order-count {
+      color: #9a4c20;
+      background: #fff0e2;
+      padding: 7px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
     }
 
     .order-card {
-      background: white;
-      border-radius: 14px;
-      padding: 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 18px #0f172a0c;
-      border: 1px solid #e5e7eb;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      padding: 23px;
+      margin-bottom: 17px;
+      box-shadow: 0 7px 24px rgba(89, 55, 25, 0.045);
     }
 
     .order-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      gap: 14px;
       flex-wrap: wrap;
-      gap: 12px;
-      border-bottom: 1px solid #e5e7eb;
-      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 17px;
+    }
+
+    .order-top h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
     }
 
     .order-id {
+      color: var(--muted);
       font-size: 13px;
-      color: #64748b;
       overflow-wrap: anywhere;
+      line-height: 1.6;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
     }
 
     .status {
       display: inline-block;
-      padding: 7px 12px;
-      border-radius: 20px;
-      background: #e0e7ff;
-      color: #3730a3;
-      font-size: 13px;
-      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 30px;
+      background: #fff0d4;
+      color: #8a5700;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .status.Confirmed {
+      background: #e5f6e9;
+      color: #21703b;
     }
 
     .status.Delivered {
@@ -111,78 +223,145 @@
     }
 
     .items {
-      padding: 12px 0;
+      padding: 15px 0;
+    }
+
+    .items-heading {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 8px;
     }
 
     .item-row {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
-      padding: 8px 0;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 11px 0;
+      border-bottom: 1px dashed #f0e5d9;
+      font-size: 14px;
+    }
+
+    .item-row:last-child {
+      border-bottom: none;
+    }
+
+    .item-name {
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .item-price {
+      white-space: nowrap;
     }
 
     .order-bottom {
-      border-top: 1px solid #e5e7eb;
-      padding-top: 15px;
+      border-top: 1px solid var(--border);
+      padding-top: 17px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 15px;
       flex-wrap: wrap;
-      gap: 12px;
+    }
+
+    .total-label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
     }
 
     .total {
-      font-size: 20px;
-      font-weight: bold;
-      color: #172554;
+      font-size: 23px;
+      font-weight: 800;
+      color: var(--primary-dark);
     }
 
-    .muted {
-      color: #64748b;
-      font-size: 14px;
+    .order-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .message {
       background: white;
-      padding: 24px;
-      border-radius: 12px;
+      padding: 34px 20px;
+      border-radius: 17px;
       text-align: center;
-      border: 1px solid #e5e7eb;
+      border: 1px solid var(--border);
+      box-shadow: 0 7px 24px rgba(89, 55, 25, 0.04);
     }
 
-    .button {
-      display: inline-block;
-      border: 0;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
+    .message h3 {
+      margin: 0 0 10px;
     }
 
-    .button.secondary {
-      background: #475569;
+    .message p {
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 500px;
+      margin: 0 auto 20px;
     }
 
-    .error {
-      color: #b91c1c;
+    .message.error {
+      color: #b42318;
+      line-height: 1.7;
+    }
+
+    .loading-dot {
+      width: 25px;
+      height: 25px;
+      border: 3px solid #f4d7c1;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     footer {
       text-align: center;
-      padding: 25px;
-      color: #64748b;
+      padding: 23px 16px;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+      background: white;
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 600px) {
       header {
-        padding: 16px;
+        padding: 16px 20px;
+      }
+
+      .header-links {
+        gap: 14px;
+      }
+
+      main {
+        padding: 28px 15px 38px;
       }
 
       .order-card {
-        padding: 16px;
+        padding: 17px;
+      }
+
+      .order-bottom {
+        align-items: flex-start;
+      }
+
+      .order-actions {
+        width: 100%;
+      }
+
+      .order-actions .button {
+        flex: 1;
       }
     }
   </style>
@@ -190,12 +369,12 @@
 
 <body>
   <header>
-    <h2>StationeryHub</h2>
+    <a class="brand" href="index.html">StationeryHub</a>
 
     <nav class="header-links">
       <a href="index.html">Home</a>
-      <a href="customer-account.html">Account</a>
-      <button class="button secondary" id="logoutBtn">
+      <a href="customer-account.html">My Account</a>
+      <button class="button secondary" id="logoutBtn" type="button">
         Logout
       </button>
     </nav>
@@ -203,17 +382,28 @@
 
   <main>
     <section class="intro">
+      <div class="eyebrow">Your shopping history</div>
       <h1>My Orders</h1>
-      <p>View your order history and current delivery status.</p>
+      <p>Track your purchases, check order status and view your order details.</p>
     </section>
 
-    <section id="ordersContainer">
-      <div class="message">Loading your orders...</div>
+    <section>
+      <div class="orders-heading">
+        <h2>Your order history</h2>
+        <span class="order-count" id="orderCount">Loading...</span>
+      </div>
+
+      <div id="ordersContainer">
+        <div class="message">
+          <div class="loading-dot"></div>
+          <p>Loading your orders...</p>
+        </div>
+      </div>
     </section>
   </main>
 
   <footer>
-    &copy; 2026 StationeryHub
+    &copy; 2026 StationeryHub. Made for your everyday stationery needs.
   </footer>
 
   <script>
@@ -221,6 +411,7 @@
     const tokenKey = "stationeryHubCustomerToken";
 
     const container = document.getElementById("ordersContainer");
+    const countLabel = document.getElementById("orderCount");
     const token = sessionStorage.getItem(tokenKey);
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
@@ -236,11 +427,12 @@
       box.textContent = message;
 
       container.appendChild(box);
+      countLabel.textContent = "Unavailable";
     }
 
     function addText(parent, tag, text, className = "") {
       const element = document.createElement(tag);
-      element.textContent = text;
+      element.textContent = text == null ? "" : String(text);
 
       if (className) {
         element.className = className;
@@ -251,6 +443,8 @@
     }
 
     function formatDate(value) {
+      if (!value) return "Date unavailable";
+
       const date = new Date(value);
 
       if (Number.isNaN(date.getTime())) {
@@ -263,6 +457,12 @@
       });
     }
 
+    function formatMoney(value) {
+      const amount = Number(value);
+
+      return "₹" + (Number.isFinite(amount) ? amount : 0).toFixed(2);
+    }
+
     function renderOrder(order) {
       const card = document.createElement("article");
       card.className = "order-card";
@@ -273,25 +473,35 @@
       const details = document.createElement("div");
 
       addText(details, "h3", "Order details");
+
       addText(
         details,
         "div",
-        "Order ID: " + order.orderId,
+        "Order ID: " + (order.orderId || "Unavailable"),
         "order-id"
       );
+
       addText(
         details,
         "p",
-        "Placed: " + formatDate(order.orderDate),
+        "Placed on: " + formatDate(order.orderDate),
         "muted"
       );
 
-      const status = addText(
-        top,
-        "span",
-        order.status || "Pending",
-        "status " + (order.status || "Pending")
-      );
+      const currentStatus = String(order.status || "Pending");
+      const allowedStatuses = [
+        "Pending",
+        "Confirmed",
+        "Shipped",
+        "Delivered",
+        "Cancelled"
+      ];
+
+      const safeStatus = allowedStatuses.includes(currentStatus)
+        ? currentStatus
+        : "Pending";
+
+      addText(top, "span", safeStatus, "status " + safeStatus);
 
       top.prepend(details);
       card.appendChild(top);
@@ -299,42 +509,69 @@
       const itemsBox = document.createElement("div");
       itemsBox.className = "items";
 
-      (order.items || []).forEach((item) => {
-        const row = document.createElement("div");
-        row.className = "item-row";
+      addText(itemsBox, "div", "ITEMS ORDERED", "items-heading");
 
-        const name = document.createElement("span");
-        name.textContent =
-          `${item.name} × ${item.quantity}`;
+      const items = Array.isArray(order.items) ? order.items : [];
 
-        const price = document.createElement("strong");
-        price.textContent = "₹" +
-          (Number(item.price) * Number(item.quantity)).toFixed(2);
+      if (items.length === 0) {
+        addText(itemsBox, "p", "Item details are not available.", "muted");
+      } else {
+        items.forEach((item) => {
+          const row = document.createElement("div");
+          row.className = "item-row";
 
-        row.append(name, price);
-        itemsBox.appendChild(row);
-      });
+          const quantity = Number(item.quantity) || 0;
+          const price = Number(item.price) || 0;
+
+          addText(
+            row,
+            "span",
+            (item.name || "Stationery item") + " × " + quantity,
+            "item-name"
+          );
+
+          addText(
+            row,
+            "strong",
+            formatMoney(price * quantity),
+            "item-price"
+          );
+
+          itemsBox.appendChild(row);
+        });
+      }
 
       card.appendChild(itemsBox);
 
       const bottom = document.createElement("div");
       bottom.className = "order-bottom";
 
-      addText(
-        bottom,
-        "span",
-        "Total: ₹" + Number(order.totalAmount).toFixed(2),
-        "total"
-      );
+      const totalBox = document.createElement("div");
+      addText(totalBox, "span", "TOTAL AMOUNT", "total-label");
+      addText(totalBox, "span", formatMoney(order.totalAmount), "total");
 
-      addText(
-        bottom,
-        "span",
+      const actions = document.createElement("div");
+      actions.className = "order-actions";
+
+      const trackLink = document.createElement("a");
+      trackLink.className = "button";
+      trackLink.href = "track-order.html";
+      trackLink.textContent = "Track Order";
+
+      actions.appendChild(trackLink);
+
+      bottom.append(totalBox, actions);
+
+      const updated = addText(
+        card,
+        "p",
         "Last updated: " + formatDate(order.lastUpdated),
         "muted"
       );
+      updated.style.margin = "14px 0 0";
 
       card.appendChild(bottom);
+
       return card;
     }
 
@@ -355,7 +592,13 @@
           }
         );
 
-        const data = await response.json();
+        let data;
+
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error("Server returned an invalid response. Please try again.");
+        }
 
         if (response.status === 401 || response.status === 403) {
           sessionStorage.removeItem(tokenKey);
@@ -364,12 +607,16 @@
         }
 
         if (!response.ok || !data.success) {
-          throw new Error(data.message || "Unable to load orders.");
+          throw new Error(data.message || "Unable to load your orders.");
         }
 
-        container.replaceChildren();
+        const orders = Array.isArray(data.orders) ? data.orders : [];
 
-        if (!data.orders || data.orders.length === 0) {
+        container.replaceChildren();
+        countLabel.textContent =
+          orders.length + (orders.length === 1 ? " order" : " orders");
+
+        if (orders.length === 0) {
           const empty = document.createElement("div");
           empty.className = "message";
 
@@ -377,7 +624,7 @@
           addText(
             empty,
             "p",
-            "Your new orders will appear here after you place them while logged in."
+            "Your orders will appear here after you place your first purchase while logged in."
           );
 
           const shopLink = document.createElement("a");
@@ -390,13 +637,14 @@
           return;
         }
 
-        data.orders.forEach((order) => {
+        orders.forEach((order) => {
           container.appendChild(renderOrder(order));
         });
       } catch (error) {
         console.error("My Orders error:", error);
+
         showMessage(
-          error.message || "Could not connect to the server.",
+          error.message || "Could not connect to the server. Check that your backend is running.",
           true
         );
       }

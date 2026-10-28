@@ -6,3 +6,5 @@ node_modules/
 npm-debug.log*
 .vercel
 .env*
+server/node_modules/
+*.log

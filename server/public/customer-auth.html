@@ -4,145 +4,467 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fff8ef">
+  <meta name="description" content="Sign in or create your StationeryHub customer account.">
   <title>Customer Account | StationeryHub</title>
 
   <style>
-    * { box-sizing: border-box; }
+    :root {
+      --primary: #e97832;
+      --primary-dark: #c85e20;
+      --navy: #202b3c;
+      --muted: #737b88;
+      --border: #eadfd2;
+      --cream: #fff8ef;
+      --white: #ffffff;
+      --success: #167849;
+      --error: #b42318;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
+      padding: 24px;
       display: grid;
       place-items: center;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #eff6ff, #f8fafc);
-      color: #172033;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--navy);
+      background:
+        radial-gradient(circle at 10% 10%, #ffe2c3 0, transparent 30%),
+        radial-gradient(circle at 90% 90%, #ffdfc0 0, transparent 28%),
+        var(--cream);
     }
 
-    .card {
+    button,
+    input {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .page {
       width: 100%;
-      max-width: 440px;
-      padding: 28px;
-      border-radius: 18px;
-      background: white;
-      box-shadow: 0 12px 40px #0f172a15;
+      max-width: 1000px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      border: 1px solid rgba(234, 223, 210, 0.9);
+      border-radius: 26px;
+      background: var(--white);
+      box-shadow: 0 24px 70px rgba(63, 43, 24, 0.12);
     }
 
-    h1 { margin: 0 0 8px; }
-    .subtitle { color: #64748b; line-height: 1.5; }
+    .welcome-panel {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 590px;
+      padding: 42px;
+      overflow: hidden;
+      background: linear-gradient(145deg, #fff0df, #ffe0c0);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--navy);
+      font-size: 23px;
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: -0.7px;
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      border-radius: 13px;
+      background: white;
+      font-size: 24px;
+    }
+
+    .brand-highlight {
+      color: var(--primary);
+    }
+
+    .welcome-copy {
+      position: relative;
+      z-index: 1;
+      margin: 45px 0;
+    }
+
+    .eyebrow {
+      color: #b45b24;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.7px;
+    }
+
+    .welcome-copy h1 {
+      margin: 15px 0;
+      font-size: clamp(34px, 4vw, 48px);
+      line-height: 1.12;
+      letter-spacing: -1.8px;
+    }
+
+    .welcome-copy h1 span {
+      color: var(--primary-dark);
+    }
+
+    .welcome-copy p {
+      max-width: 360px;
+      color: #6c6b6a;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .decorative-icon {
+      align-self: flex-end;
+      font-size: 100px;
+      line-height: 1;
+      filter: drop-shadow(0 12px 10px rgba(130, 76, 28, 0.12));
+    }
+
+    .form-panel {
+      padding: 42px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .mobile-brand {
+      display: none;
+    }
+
+    .form-heading h2 {
+      margin: 0 0 9px;
+      font-size: 30px;
+      letter-spacing: -0.8px;
+    }
+
+    .form-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
 
     .tabs {
-      display: flex;
-      gap: 8px;
-      margin: 24px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin: 27px 0 22px;
+      padding: 5px;
+      border-radius: 12px;
+      background: #f7f3ee;
     }
 
     .tabs button {
-      flex: 1;
-      padding: 12px;
-      border: 1px solid #dbe3ef;
-      border-radius: 8px;
-      background: #f8fafc;
+      min-height: 43px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: #6b7280;
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
+      transition: background 0.2s, color 0.2s;
     }
 
     .tabs button.active {
-      background: #2563eb;
-      color: white;
-      border-color: #2563eb;
+      background: white;
+      color: var(--primary-dark);
+      box-shadow: 0 2px 8px rgba(45, 35, 20, 0.08);
+    }
+
+    .field {
+      margin-bottom: 17px;
     }
 
     label {
       display: block;
-      margin: 16px 0 7px;
-      font-weight: bold;
-      font-size: 14px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .input-wrap {
+      position: relative;
     }
 
     input {
+      display: block;
       width: 100%;
-      padding: 13px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 15px;
+      min-height: 48px;
+      padding: 13px 14px;
+      border: 1px solid #dedbd6;
+      border-radius: 10px;
+      outline: none;
+      background: #fff;
+      color: var(--navy);
+      font-size: 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input::placeholder {
+      color: #a1a1aa;
     }
 
     input:focus {
-      outline: 2px solid #bfdbfe;
-      border-color: #2563eb;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(233, 120, 50, 0.13);
     }
 
-    .submit {
-      width: 100%;
-      margin-top: 22px;
-      padding: 14px;
+    .password-input {
+      padding-right: 76px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
       border: 0;
-      border-radius: 8px;
-      background: #2563eb;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
+      background: transparent;
+      color: var(--primary-dark);
+      font-size: 12px;
+      font-weight: 700;
       cursor: pointer;
     }
 
-    button:disabled { opacity: 0.6; }
+    .submit-button {
+      width: 100%;
+      min-height: 49px;
+      margin-top: 5px;
+      padding: 13px 18px;
+      border: 0;
+      border-radius: 11px;
+      background: var(--primary);
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 7px 18px rgba(233, 120, 50, 0.2);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .submit-button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      background: var(--primary-dark);
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
 
     #message {
-      margin-top: 16px;
-      line-height: 1.5;
+      min-height: 22px;
+      margin: 15px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
       overflow-wrap: anywhere;
     }
 
-    .error { color: #b91c1c; }
-    .success { color: #15803d; }
+    .error {
+      color: var(--error);
+    }
 
-    .back {
+    .success {
+      color: var(--success);
+    }
+
+    .back-link {
       display: block;
+      margin-top: 20px;
+      color: #6b7280;
+      font-size: 13px;
       text-align: center;
-      margin-top: 22px;
-      color: #2563eb;
       text-decoration: none;
     }
 
-    .hidden { display: none; }
+    .back-link:hover {
+      color: var(--primary-dark);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 16px;
+      }
+
+      .page {
+        max-width: 460px;
+        grid-template-columns: 1fr;
+        border-radius: 22px;
+      }
+
+      .welcome-panel {
+        display: none;
+      }
+
+      .form-panel {
+        padding: 30px 24px;
+      }
+
+      .mobile-brand {
+        display: inline-flex;
+        margin-bottom: 30px;
+      }
+
+      .form-heading h2 {
+        font-size: 27px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      body {
+        padding: 10px;
+      }
+
+      .form-panel {
+        padding: 25px 17px;
+      }
+
+      .form-heading h2 {
+        font-size: 24px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <main class="card">
-    <h1>StationeryHub</h1>
-    <p class="subtitle">Create your account or sign in to continue.</p>
+  <main class="page">
+    <aside class="welcome-panel">
+      <a href="index.html" class="brand" aria-label="StationeryHub home">
+        <span class="brand-icon">✏️</span>
+        <span>Stationery<span class="brand-highlight">Hub</span></span>
+      </a>
 
-    <div class="tabs">
-      <button type="button" id="loginTab" class="active">Login</button>
-      <button type="button" id="signupTab">Sign Up</button>
-    </div>
-
-    <form id="authForm">
-      <div id="nameField" class="hidden">
-        <label for="name">Full name</label>
-        <input id="name" name="name" autocomplete="name"
-               minlength="2" maxlength="80">
+      <div class="welcome-copy">
+        <span class="eyebrow">YOUR CREATIVE CORNER</span>
+        <h1>Ideas begin with <span>the right tools.</span></h1>
+        <p>
+          Sign in to manage your orders and keep your favourite
+          stationery essentials close at hand.
+        </p>
       </div>
 
-      <label for="email">Email address</label>
-      <input id="email" name="email" type="email"
-             autocomplete="email" maxlength="254" required>
+      <div class="decorative-icon" aria-hidden="true">📚</div>
+    </aside>
 
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password"
-             autocomplete="current-password"
-             minlength="8" maxlength="72" required>
+    <section class="form-panel" aria-labelledby="formTitle">
+      <a href="index.html" class="brand mobile-brand">
+        <span class="brand-icon">✏️</span>
+        <span>Stationery<span class="brand-highlight">Hub</span></span>
+      </a>
 
-      <button class="submit" id="submitButton" type="submit">
-        Login
-      </button>
-    </form>
+      <div class="form-heading">
+        <h2 id="formTitle">Welcome back!</h2>
+        <p id="formSubtitle">Enter your details to sign in to your account.</p>
+      </div>
 
-    <p id="message" role="status" aria-live="polite"></p>
+      <div class="tabs" role="tablist" aria-label="Account access">
+        <button
+          type="button"
+          id="loginTab"
+          class="active"
+          role="tab"
+          aria-selected="true"
+        >Login</button>
 
-    <a class="back" href="index.html">← Back to Home</a>
+        <button
+          type="button"
+          id="signupTab"
+          role="tab"
+          aria-selected="false"
+        >Sign Up</button>
+      </div>
+
+      <form id="authForm">
+        <div id="nameField" class="field hidden">
+          <label for="name">Full name</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            minlength="2"
+            maxlength="80"
+            placeholder="Enter your full name"
+            disabled
+          >
+        </div>
+
+        <div class="field">
+          <label for="email">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            maxlength="254"
+            placeholder="you@example.com"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input
+              id="password"
+              class="password-input"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              minlength="8"
+              maxlength="72"
+              placeholder="Enter your password"
+              required
+            >
+            <button
+              type="button"
+              class="toggle-password"
+              id="togglePassword"
+              aria-controls="password"
+              aria-pressed="false"
+            >Show</button>
+          </div>
+        </div>
+
+        <button class="submit-button" id="submitButton" type="submit">
+          Login to Account
+        </button>
+      </form>
+
+      <p id="message" role="status" aria-live="polite"></p>
+
+      <a class="back-link" href="index.html">← Back to StationeryHub</a>
+    </section>
   </main>
 
   <script>
@@ -157,6 +479,9 @@
     const message = document.getElementById("message");
     const loginTab = document.getElementById("loginTab");
     const signupTab = document.getElementById("signupTab");
+    const formTitle = document.getElementById("formTitle");
+    const formSubtitle = document.getElementById("formSubtitle");
+    const togglePassword = document.getElementById("togglePassword");
 
     let mode = "login";
 
@@ -170,14 +495,35 @@
       const signup = mode === "signup";
 
       nameField.classList.toggle("hidden", !signup);
+      nameInput.disabled = !signup;
       nameInput.required = signup;
+
       passwordInput.autocomplete = signup
         ? "new-password"
         : "current-password";
 
-      submitButton.textContent = signup ? "Create Account" : "Login";
+      passwordInput.value = "";
+      passwordInput.type = "password";
+      togglePassword.textContent = "Show";
+      togglePassword.setAttribute("aria-pressed", "false");
+
+      submitButton.textContent = signup
+        ? "Create My Account"
+        : "Login to Account";
+
+      formTitle.textContent = signup
+        ? "Create your account"
+        : "Welcome back!";
+
+      formSubtitle.textContent = signup
+        ? "Fill in your details to join StationeryHub."
+        : "Enter your details to sign in to your account.";
+
       loginTab.classList.toggle("active", !signup);
       signupTab.classList.toggle("active", signup);
+
+      loginTab.setAttribute("aria-selected", String(!signup));
+      signupTab.setAttribute("aria-selected", String(signup));
 
       showMessage("");
     }
@@ -185,41 +531,58 @@
     loginTab.addEventListener("click", () => setMode("login"));
     signupTab.addEventListener("click", () => setMode("signup"));
 
+    togglePassword.addEventListener("click", () => {
+      const show = passwordInput.type === "password";
+
+      passwordInput.type = show ? "text" : "password";
+      togglePassword.textContent = show ? "Hide" : "Show";
+      togglePassword.setAttribute("aria-pressed", String(show));
+    });
+
     authForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       showMessage("");
 
+      if (!authForm.reportValidity()) return;
+
+      const currentMode = mode;
+
+      const payload = {
+        email: emailInput.value.trim(),
+        password: passwordInput.value
+      };
+
+      if (currentMode === "signup") {
+        payload.name = nameInput.value.trim();
+
+        if (payload.name.length < 2) {
+          showMessage("Please enter your full name (at least 2 characters).", "error");
+          nameInput.focus();
+          return;
+        }
+      }
+
       submitButton.disabled = true;
+      loginTab.disabled = true;
+      signupTab.disabled = true;
       submitButton.textContent = "Please wait...";
 
       try {
-        const payload = {
-          email: emailInput.value.trim(),
-          password: passwordInput.value
-        };
+        const response = await fetch(`${API}/${currentMode}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
 
-        if (mode === "signup") {
-          payload.name = nameInput.value.trim();
-        }
-
-        const response = await fetch(
-          `${API}/${mode}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          }
-        );
-
-        const data = await response.json();
+        const data = await response.json().catch(() => ({}));
 
         if (!response.ok || !data.success) {
-          throw new Error(data.message || "Request failed.");
+          throw new Error(data.message || "Request failed. Please try again.");
         }
 
-        if (mode === "signup") {
+        if (currentMode === "signup") {
           showMessage(
-            "Account created! Please log in with your new account.",
+            "Account created successfully! Please log in.",
             "success"
           );
 
@@ -228,7 +591,11 @@
           return;
         }
 
-        // Keep customer token separate from the admin token.
+        if (!data.token) {
+          throw new Error("Login response did not include a customer token.");
+        }
+
+        // Customer token stays separate from the admin token.
         sessionStorage.setItem(
           "stationeryHubCustomerToken",
           data.token
@@ -236,16 +603,22 @@
 
         window.location.href = "customer-account.html";
       } catch (error) {
-        showMessage(
-          error.message === "Failed to fetch"
-            ? "Cannot connect to the server. Check that the backend is running."
-            : error.message,
-          "error"
-        );
+        if (error instanceof TypeError) {
+          showMessage(
+            "Cannot connect to the server. Check that the backend is running.",
+            "error"
+          );
+        } else {
+          showMessage(error.message, "error");
+        }
       } finally {
         submitButton.disabled = false;
-        submitButton.textContent =
-          mode === "signup" ? "Create Account" : "Login";
+        loginTab.disabled = false;
+        signupTab.disabled = false;
+
+        submitButton.textContent = mode === "signup"
+          ? "Create My Account"
+          : "Login to Account";
       }
     });
   </script>

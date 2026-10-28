@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StationeryHub Admin Dashboard</title>
+  <title>StationeryHub | Admin Dashboard</title>
 
   <style>
     * {
@@ -14,113 +14,203 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #171012;
-      color: #333;
+      background: #f3f5f9;
+      color: #172033;
     }
 
     header {
-      background: #d63384;
+      background: #172554;
       color: white;
-      padding: 20px;
+      padding: 18px 5%;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
     }
 
     header h1 {
       margin: 0;
-      font-size: 23px;
+      font-size: 24px;
     }
 
     button {
-      border: none;
-      border-radius: 6px;
-      padding: 10px 14px;
+      border: 0;
+      border-radius: 7px;
+      padding: 10px 15px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 600;
+      background: #2563eb;
+      color: white;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .logout {
-      background: white;
-      color: #d63384;
+      background: #dc2626;
     }
 
     main {
-      max-width: 1100px;
-      margin: 25px auto;
-      padding: 0 15px;
+      max-width: 1200px;
+      padding: 24px 16px;
+      margin: auto;
+    }
+
+    .panel {
+      background: white;
+      padding: 22px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 3px 15px #1725540d;
     }
 
     .topbar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
       gap: 12px;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .product-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      font: inherit;
+      background: white;
+      color: #172033;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 85px;
+    }
+
+    .form-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
-    #refreshBtn {
-      background: #d63384;
-      color: white;
+    .secondary {
+      background: #64748b;
     }
 
-    #message {
-      margin: 15px 0;
+    .danger {
+      background: #dc2626;
+    }
+
+    .edit {
+      background: #0f766e;
+    }
+
+    .message {
+      margin: 12px 0;
       overflow-wrap: anywhere;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .product-card, .order {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      background: #fff;
+      min-width: 0;
+    }
+
+    .product-card h3, .order h3 {
+      overflow-wrap: anywhere;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 150px;
+      object-fit: contain;
+      background: #f8fafc;
+      border-radius: 8px;
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
     }
 
     .order {
-      background: white;
-      border: 1px solid #f0c5d9;
-      border-radius: 10px;
-      padding: 18px;
-      margin: 16px 0;
-      box-shadow: 0 3px 10px #0000000a;
-    }
-
-    .order h3 {
-      margin-top: 0;
-      color: #b4236b;
+      margin: 14px 0;
     }
 
     .order p {
-      line-height: 1.5;
       overflow-wrap: anywhere;
+    }
+
+    .items {
+      padding-left: 22px;
     }
 
     .status-row {
       display: flex;
       gap: 10px;
-      flex-wrap: wrap;
       align-items: center;
-      margin-top: 15px;
+      flex-wrap: wrap;
+      margin-top: 12px;
     }
 
-    select {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      max-width: 100%;
+    .status-row select {
+      max-width: 210px;
     }
 
-    .save-btn {
-      background: #198754;
-      color: white;
-    }
-
-    .items {
-      padding-left: 20px;
+    .empty {
+      color: #64748b;
     }
 
     @media (max-width: 600px) {
-      header h1 {
-        font-size: 19px;
+      .product-form {
+        grid-template-columns: 1fr;
       }
 
-      .order {
-        padding: 13px;
+      .field.full, .form-actions {
+        grid-column: auto;
+      }
+
+      .panel {
+        padding: 15px;
+      }
+
+      header h1 {
+        font-size: 20px;
       }
     }
   </style>
@@ -129,22 +219,138 @@
 <body>
   <header>
     <h1>StationeryHub Admin</h1>
-    <button class="logout" id="logoutBtn">Logout</button>
+    <button id="logoutBtn" class="logout" type="button">Logout</button>
   </header>
 
   <main>
-    <div class="topbar">
-      <h2>Customer Orders</h2>
-      <button id="refreshBtn">Refresh Orders</button>
-    </div>
+    <!-- PRODUCT MANAGEMENT -->
+    <section class="panel">
+      <div class="topbar">
+        <h2>Manage Products</h2>
+        <button id="refreshProductsBtn" type="button">
+          Refresh Products
+        </button>
+      </div>
 
-    <p id="message" role="status">Loading orders...</p>
-    <section id="orders"></section>
+      <p id="productMessage" class="message" role="status"></p>
+
+      <form id="productForm" class="product-form">
+        <input id="productId" type="hidden">
+
+        <div class="field">
+          <label for="productName">Product Name *</label>
+          <input
+            id="productName"
+            type="text"
+            maxlength="120"
+            placeholder="e.g. Blue Ball Pen"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="productCategory">Category *</label>
+          <input
+            id="productCategory"
+            type="text"
+            maxlength="80"
+            placeholder="e.g. Pens"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="productPrice">Price (₹) *</label>
+          <input
+            id="productPrice"
+            type="number"
+            min="0"
+            step="0.01"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="productStock">Stock *</label>
+          <input
+            id="productStock"
+            type="number"
+            min="0"
+            step="1"
+            required
+          >
+        </div>
+
+        <div class="field full">
+          <label for="productDescription">Description</label>
+          <textarea
+            id="productDescription"
+            maxlength="1000"
+            placeholder="Write product details..."
+          ></textarea>
+        </div>
+
+        <div class="field full">
+          <label for="productImage">Image URL (optional)</label>
+          <input
+            id="productImage"
+            type="url"
+            placeholder="https://example.com/product.jpg"
+          >
+        </div>
+
+        <div class="form-actions">
+          <button id="submitProductBtn" type="submit">
+            Add Product
+          </button>
+
+          <button
+            id="cancelEditBtn"
+            class="secondary"
+            type="button"
+            hidden
+          >
+            Cancel Edit
+          </button>
+        </div>
+      </form>
+
+      <h3>Product List</h3>
+      <div id="productsList" class="product-grid">
+        <p class="empty">Loading products...</p>
+      </div>
+    </section>
+
+    <!-- CUSTOMER ORDERS -->
+    <section class="panel">
+      <div class="topbar">
+        <h2>Customer Orders</h2>
+        <button id="refreshBtn" type="button">Refresh Orders</button>
+      </div>
+
+      <p id="message" class="message" role="status">Loading orders...</p>
+      <section id="orders"></section>
+    </section>
   </main>
 
   <script>
-    const API_URL = "http://localhost:5000/api/orders";
+    const PRODUCTS_API = "http://localhost:5000/api/products";
+    const ORDERS_API = "http://localhost:5000/api/orders";
+
     const token = sessionStorage.getItem("stationeryHubAdminToken");
+
+    const productForm = document.getElementById("productForm");
+    const productIdInput = document.getElementById("productId");
+    const productNameInput = document.getElementById("productName");
+    const productCategoryInput = document.getElementById("productCategory");
+    const productPriceInput = document.getElementById("productPrice");
+    const productStockInput = document.getElementById("productStock");
+    const productDescriptionInput = document.getElementById("productDescription");
+    const productImageInput = document.getElementById("productImage");
+    const productMessage = document.getElementById("productMessage");
+    const productsList = document.getElementById("productsList");
+    const submitProductBtn = document.getElementById("submitProductBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
 
     const message = document.getElementById("message");
     const ordersContainer = document.getElementById("orders");
@@ -157,8 +363,6 @@
       sessionStorage.removeItem("stationeryHubAdminToken");
       window.location.replace("admin-login.html");
     });
-
-    document.getElementById("refreshBtn").addEventListener("click", loadOrders);
 
     async function apiRequest(url, options = {}) {
       const response = await fetch(url, {
@@ -195,27 +399,245 @@
       })[char]);
     }
 
+    function showProductMessage(text, isError = false) {
+      productMessage.textContent = text;
+      productMessage.style.color = isError ? "#b91c1c" : "#15803d";
+    }
+
+    function resetProductForm() {
+      productForm.reset();
+      productIdInput.value = "";
+      submitProductBtn.textContent = "Add Product";
+      cancelEditBtn.hidden = true;
+    }
+
+    cancelEditBtn.addEventListener("click", () => {
+      resetProductForm();
+      showProductMessage("Edit cancelled.");
+    });
+
+    // LOAD PRODUCTS
+    async function loadProducts() {
+      productsList.replaceChildren();
+      productsList.textContent = "Loading products...";
+      showProductMessage("");
+
+      try {
+        // Product list is public, so no admin token is needed here.
+        const response = await fetch(PRODUCTS_API);
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data.message || "Could not load products.");
+        }
+
+        const products = Array.isArray(data)
+          ? data
+          : (data.products || data.data || []);
+
+        productsList.replaceChildren();
+
+        if (!Array.isArray(products) || products.length === 0) {
+          productsList.textContent = "No products found.";
+          productsList.className = "product-grid empty";
+          return;
+        }
+
+        productsList.className = "product-grid";
+
+        products.forEach(product => {
+          const card = document.createElement("article");
+          card.className = "product-card";
+
+          const name = escapeHTML(product.name || "Unnamed product");
+          const category = escapeHTML(product.category || "Uncategorized");
+          const price = escapeHTML(product.price ?? 0);
+          const stock = escapeHTML(product.stock ?? 0);
+          const description = escapeHTML(product.description || "No description");
+          const image = typeof product.image === "string" ? product.image : "";
+
+          card.innerHTML = `
+            ${
+              image
+                ? `<img class="product-image" src="${escapeHTML(image)}"
+                     alt="${name}" loading="lazy">`
+                : `<div class="product-image"
+                     style="display:grid;place-items:center">No image</div>`
+            }
+            <h3>${name}</h3>
+            <p><strong>Category:</strong> ${category}</p>
+            <p><strong>Price:</strong> ₹${price}</p>
+            <p><strong>Stock:</strong> ${stock}</p>
+            <p>${description}</p>
+            <div class="product-actions">
+              <button type="button" class="edit edit-btn">Edit</button>
+              <button type="button" class="danger delete-btn">Delete</button>
+            </div>
+          `;
+
+          card.querySelector(".edit-btn").addEventListener("click", () => {
+            productIdInput.value = product._id;
+            productNameInput.value = product.name || "";
+            productCategoryInput.value = product.category || "";
+            productPriceInput.value = product.price ?? "";
+            productStockInput.value = product.stock ?? 0;
+            productDescriptionInput.value = product.description || "";
+            productImageInput.value = product.image || "";
+
+            submitProductBtn.textContent = "Update Product";
+            cancelEditBtn.hidden = false;
+            showProductMessage("Editing: " + (product.name || "product"));
+
+            productForm.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+
+            productNameInput.focus();
+          });
+
+          card.querySelector(".delete-btn").addEventListener("click", async event => {
+            if (!product._id) {
+              showProductMessage("Product ID missing; cannot delete.", true);
+              return;
+            }
+
+            const confirmed = window.confirm(
+              `Are you sure you want to delete "${product.name}"?`
+            );
+
+            if (!confirmed) return;
+
+            const button = event.currentTarget;
+            button.disabled = true;
+            button.textContent = "Deleting...";
+
+            try {
+              const result = await apiRequest(
+                `${PRODUCTS_API}/${encodeURIComponent(product._id)}`,
+                { method: "DELETE" }
+              );
+
+              showProductMessage(result.message || "Product deleted successfully.");
+
+              if (productIdInput.value === product._id) {
+                resetProductForm();
+              }
+
+              await loadProducts();
+            } catch (error) {
+              showProductMessage(error.message, true);
+              button.disabled = false;
+              button.textContent = "Delete";
+            }
+          });
+
+          productsList.appendChild(card);
+        });
+
+        showProductMessage(`${products.length} product(s) loaded.`);
+      } catch (error) {
+        productsList.textContent = "Could not load products.";
+        showProductMessage(error.message, true);
+      }
+    }
+
+    // ADD OR EDIT PRODUCT
+    productForm.addEventListener("submit", async event => {
+      event.preventDefault();
+
+      const id = productIdInput.value;
+
+      const price = productPriceInput.value;
+      const stock = productStockInput.value;
+
+      if (
+        price.trim() === "" ||
+        !Number.isFinite(Number(price)) ||
+        Number(price) < 0
+      ) {
+        showProductMessage("Enter a valid non-negative price.", true);
+        return;
+      }
+
+      if (
+        stock.trim() === "" ||
+        !Number.isSafeInteger(Number(stock)) ||
+        Number(stock) < 0
+      ) {
+        showProductMessage("Stock must be a non-negative whole number.", true);
+        return;
+      }
+
+      const product = {
+        name: productNameInput.value.trim(),
+        category: productCategoryInput.value.trim(),
+        price: Number(price),
+        stock: Number(stock),
+        description: productDescriptionInput.value.trim(),
+        image: productImageInput.value.trim()
+      };
+
+      if (!product.name || !product.category) {
+        showProductMessage("Product name and category are required.", true);
+        return;
+      }
+
+      submitProductBtn.disabled = true;
+      submitProductBtn.textContent = id ? "Updating..." : "Adding...";
+
+      try {
+        const result = await apiRequest(
+          id
+            ? `${PRODUCTS_API}/${encodeURIComponent(id)}`
+            : PRODUCTS_API,
+          {
+            method: id ? "PUT" : "POST",
+            body: JSON.stringify(product)
+          }
+        );
+
+        showProductMessage(
+          result.message || (id ? "Product updated." : "Product added.")
+        );
+
+        resetProductForm();
+        await loadProducts();
+      } catch (error) {
+        showProductMessage(error.message, true);
+      } finally {
+        submitProductBtn.disabled = false;
+        submitProductBtn.textContent = productIdInput.value
+          ? "Update Product"
+          : "Add Product";
+      }
+    });
+
+    document.getElementById("refreshProductsBtn")
+      .addEventListener("click", loadProducts);
+
+    // ORDER HELPERS
     function formatItems(items) {
       if (!Array.isArray(items) || items.length === 0) {
         return "<li>No item details available</li>";
       }
 
       return items.map(item => {
-        const name = escapeHTML(
-          item.name || item.productName || item.title || "Product"
-        );
-        const quantity = Number(item.quantity) || 1;
+        const name = escapeHTML(item.name || item.productName || "Item");
+        const quantity = escapeHTML(item.quantity ?? item.qty ?? 1);
+        const price = escapeHTML(item.price ?? 0);
 
-        return `<li>${name} — Qty: ${quantity}</li>`;
+        return `<li>${name} — Qty: ${quantity}, Price: ₹${price}</li>`;
       }).join("");
     }
 
+    // LOAD CUSTOMER ORDERS
     async function loadOrders() {
       message.textContent = "Loading orders...";
       ordersContainer.replaceChildren();
 
       try {
-        const data = await apiRequest(API_URL);
+        const data = await apiRequest(ORDERS_API);
         const orders = Array.isArray(data)
           ? data
           : (data.orders || data.data || []);
@@ -254,24 +676,24 @@
             <div class="status-row">
               <label>
                 Update status:
-                <select class="status-select" aria-label="Order status">
-                  ${allowedStatuses.map(s =>
-                    `<option value="${s}" ${s === status ? "selected" : ""}>${s}</option>`
+                <select class="status-select">
+                  ${allowedStatuses.map(value =>
+                    `<option value="${value}" ${value === status ? "selected" : ""}>${value}</option>`
                   ).join("")}
                 </select>
               </label>
-              <button class="save-btn">Save Status</button>
+              <button type="button" class="save-status-btn">Save Status</button>
             </div>
-            <p class="order-message" role="status"></p>
+            <p class="status-message" role="status"></p>
           `;
 
-          const saveBtn = card.querySelector(".save-btn");
           const select = card.querySelector(".status-select");
-          const statusMessage = card.querySelector(".order-message");
+          const saveBtn = card.querySelector(".save-status-btn");
+          const statusMessage = card.querySelector(".status-message");
 
           saveBtn.addEventListener("click", async () => {
             if (!id) {
-              statusMessage.textContent = "Order ID missing.";
+              statusMessage.textContent = "Order ID is missing.";
               return;
             }
 
@@ -279,15 +701,17 @@
             statusMessage.textContent = "Updating status...";
 
             try {
-              await apiRequest(
-                `${API_URL}/${encodeURIComponent(id)}/status`,
+              const result = await apiRequest(
+                `${ORDERS_API}/${encodeURIComponent(id)}/status`,
                 {
                   method: "PATCH",
                   body: JSON.stringify({ status: select.value })
                 }
               );
 
-              statusMessage.textContent = "Status updated successfully!";
+              statusMessage.textContent =
+                result.message || "Status updated successfully!";
+
               await loadOrders();
             } catch (error) {
               statusMessage.textContent = error.message;
@@ -302,7 +726,9 @@
       }
     }
 
+    // INITIAL LOAD
     if (token) {
+      loadProducts();
       loadOrders();
     }
   </script>

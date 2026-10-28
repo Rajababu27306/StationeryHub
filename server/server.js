@@ -5,35 +5,39 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
-const adminRoutes = require("./routes/adminRoutes");
-const customerRoutes = require("./routes/customerRoutes");
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const customerRoutes = require("./routes/customerRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Configure CORS for local development and your deployed frontend.
+// Allowed frontend origins
 const allowedOrigins = (process.env.FRONTEND_URL || "")
   .split(",")
-  .map((origin) => origin.trim())
+  .map((origin) => origin.trim().replace(/\/$/, ""))
   .filter(Boolean);
 
+// Local development origins
 if (process.env.NODE_ENV !== "production") {
   allowedOrigins.push(
     "http://127.0.0.1:5500",
-    "http://localhost:5500"
+    "http://localhost:5500",
+    "http://127.0.0.1:5502",
+    "http://localhost:5502"
   );
 }
 
+// CORS configuration
 app.use(
   cors({
     origin(origin, callback) {
-      // Allow requests without an Origin header, such as local API tools.
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
         return callback(null, true);
       }
 
+      console.error("Blocked CORS origin:", origin);
       return callback(new Error("Origin not allowed by CORS"));
     },
   })
@@ -59,7 +63,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/customers", customerRoutes);
 
-// Handle invalid routes
+// Handle unknown routes
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -67,7 +71,7 @@ app.use((req, res) => {
   });
 });
 
-// CORS and other errors
+// Error handler
 app.use((err, req, res, next) => {
   if (err.message === "Origin not allowed by CORS") {
     return res.status(403).json({
@@ -84,6 +88,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Start server after MongoDB connects
 async function startServer() {
   try {
     const mongoUri = process.env.MONGODB_URI;
@@ -101,6 +106,7 @@ async function startServer() {
 
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`StationeryHub API listening on port ${PORT}`);
+      console.log("Allowed frontend origins:", allowedOrigins);
     });
   } catch (error) {
     console.error("Server startup failed:", error.message);
